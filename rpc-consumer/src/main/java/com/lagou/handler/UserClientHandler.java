@@ -1,5 +1,7 @@
 package com.lagou.handler;
 
+import com.lagou.pojo.RpcRequest;
+import com.lagou.pojo.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -27,14 +29,23 @@ public class UserClientHandler extends ChannelInboundHandlerAdapter implements C
     @Override
     public synchronized void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //将读到的服务器的数据msg ,设置为成员变量的值
-        result = msg.toString();
+        if (msg instanceof RpcResponse)
+            result = ((RpcResponse) msg).getData().toString();
+        else
+            result = "error";
         notify();
     }
 
     //4.将客户端的数写到服务器
     public synchronized Object call() throws Exception {
+        RpcRequest rpcRequest = new RpcRequest();
+        rpcRequest.setRequestId("12345678");
+        rpcRequest.setClassName("rpcRequest");
+        rpcRequest.setMethodName("sayHello");
+        rpcRequest.setParameterTypes(new Class[]{String.class});
+        rpcRequest.setParameters(new Object[]{"hello"});
         //context给服务器写数据
-        context.writeAndFlush(param);
+        context.writeAndFlush(rpcRequest);
         wait();
         return result;
     }

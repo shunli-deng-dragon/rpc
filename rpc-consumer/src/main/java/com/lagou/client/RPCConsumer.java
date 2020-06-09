@@ -38,11 +38,6 @@ public class RPCConsumer {
         //1) 初始化UserClientHandler
         userClientHandler  = new UserClientHandler();
         //2)创建连接池对象
-        RpcRequest rpcRequest = new RpcRequest();
-        rpcRequest.setRequestId("12345678");
-        rpcRequest.setClassName("rpcRequest");
-        rpcRequest.setMethodName("sayHello");
-        rpcRequest.setParameterTypes(new Class[]{UserServiceImpl.class});
         EventLoopGroup group = new NioEventLoopGroup();
         //3)创建客户端的引导对象
         Bootstrap bootstrap =  new Bootstrap();
@@ -66,9 +61,7 @@ public class RPCConsumer {
                 });
 
         //5)连接服务端
-        ChannelFuture sync = bootstrap.connect("127.0.0.1", 8999).sync();
-        sync.channel().writeAndFlush(rpcRequest);
-        sync.channel().closeFuture().sync();
+        bootstrap.connect("127.0.0.1", 8999).sync();
     }
 
     //4.编写一个方法,使用JDK的动态代理创建对象

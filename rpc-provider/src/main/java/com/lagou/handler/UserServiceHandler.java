@@ -23,7 +23,7 @@ public class UserServiceHandler extends ChannelInboundHandlerAdapter {
 
         //注意:  客户端将来发送请求的时候会传递一个参数:  UserService#sayHello#are you ok
          //1.判断当前的请求是否符合规则
-        if(msg.toString().startsWith("UserService")){
+        if(msg instanceof RpcRequest){
             //2.如果符合规则,调用实现类货到一个result
             // UserServiceImpl service = new UserServiceImpl();
             //String result = service.sayHello(msg.toString().substring(msg.toString().lastIndexOf("#")+1));

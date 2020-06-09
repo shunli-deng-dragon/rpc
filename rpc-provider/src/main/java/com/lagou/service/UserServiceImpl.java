@@ -41,8 +41,8 @@ public class UserServiceImpl implements IUserService {
                         //获取管道对象
                         ChannelPipeline pipeline = nioSocketChannel.pipeline();
                         //给管道对象pipeLine 设置编码
-                        pipeline.addLast(new RpcEncoder(RpcRequest.class, new JSONSerializer()));
-                        pipeline.addLast(new RpcDecoder(RpcResponse.class));
+                        pipeline.addLast(new RpcDecoder(RpcRequest.class));
+                        pipeline.addLast(new RpcEncoder(RpcResponse.class, new JSONSerializer()));
                         //把我们自顶一个ChannelHander添加到通道中
                         pipeline.addLast(new UserServiceHandler());
                     }
